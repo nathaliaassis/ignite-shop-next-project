@@ -1,3 +1,28 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "no-multiple-empty-lines": ["error", {
+      "max": 1,
+      "maxBOF": 0,
+      "maxEOF": 1
+    }],
+    "no-unused-vars": ["error", {
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_"
+    }],
+    "no-use-before-define": "error",
+    "eqeqeq": "error",
+    "no-empty": "error",
+    "no-empty-function": "error",
+    "array-bracket-spacing":"error", 
+    "arrow-spacing": "error",
+    "comma-spacing": ["error", {
+      "before": false,
+      "after": true
+    }],
+    "quotes": ["error", {
+      "single": true,
+      "avoidEscape": true
+    }]
+  }
 }
