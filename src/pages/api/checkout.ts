@@ -4,6 +4,14 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default async function handler(req: NextApiRequest, res: NextApiResponse ) {
   const { priceId } = req.body;
 
+  if(req.method !== "POST") {
+    return res.status(405).json({ error: "Invalid request method." });
+  }
+
+  if(!priceId) {
+    return res.status(400).json({ error: "Missing priceId" });
+  }
+
   const successUrl = `${process.env.NEXT_URL}/success`;
   const cancelUrl = `${process.env.NEXT_URL}/`;
   
