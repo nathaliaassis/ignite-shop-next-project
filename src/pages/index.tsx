@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
-import { HomeContainer, Product } from "styles/pages/Home";
+import { HomeContainer, Product } from "styles/pages/home";
 
 import { stripe } from "lib/stripe";
 import Stripe from "stripe";

@@ -1,13 +1,14 @@
 import { stripe } from "lib/stripe";
-import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Stripe from "stripe";
+import axios from "axios";
 import {
   ImageContainer,
   ProductContainer,
   ProductDetails,
-} from "styles/pages/Product";
+} from "styles/pages/product";
 
 interface ProductProps {
   product: {
@@ -16,6 +17,7 @@ interface ProductProps {
     description: string;
     price: string;
     imageUrl: string;
+    defaultPriceId: string;
   };
 }
 
@@ -25,6 +27,22 @@ export default function Product({ product }: ProductProps) {
   if (isFallback) {
     return <span>Loading...</span>;
   }
+
+  async function handleBuyButton() {
+    try {
+      const response = await axios.post("/api/checkout", {
+        priceId: product.defaultPriceId,
+      });
+
+      const { checkoutUrl } = response.data;
+
+      window.location.href = checkoutUrl; // rota externa
+    } catch (error) {
+      // Conectar com uma ferramenta de observabilidade (DataDog, Sentry)
+      alert("Falha ao redirecionar ao checkout.");
+    }
+  }
+
   return (
     <ProductContainer>
       <ImageContainer>
@@ -39,7 +57,7 @@ export default function Product({ product }: ProductProps) {
         <h1>{product.name}</h1>
         <span>{product.price}</span>
         <p>{product.description}</p>
-        <button>Comprar agora</button>
+        <button onClick={handleBuyButton}>Comprar agora</button>
       </ProductDetails>
     </ProductContainer>
   );
@@ -71,6 +89,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
           currency: "BRL",
         }).format(price.unit_amount / 100),
         description: product.description,
+        defaultPriceId: price.id,
       },
     },
   };
