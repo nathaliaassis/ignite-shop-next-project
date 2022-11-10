@@ -3,18 +3,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
-import {
-  BagButton,
-  HomeContainer,
-  Product,
-  ProductDescription,
-} from "styles/pages/home";
+import { HomeContainer, Product, ProductDescription } from "styles/pages/home";
 
 import { stripe } from "lib/stripe";
 import Stripe from "stripe";
 import Head from "next/head";
 
 import BagIcon from "assets/bag.svg";
+import BagButton from "components/bagButton";
 
 interface HomeProps {
   products: {
@@ -57,14 +53,7 @@ export default function Home({ products }: HomeProps) {
                     <strong>{product.name}</strong>
                     <span>{product.price}</span>
                   </ProductDescription>
-                  <BagButton>
-                    <Image
-                      src={BagIcon}
-                      width={32}
-                      height={32}
-                      alt="Bag icon"
-                    />
-                  </BagButton>
+                  <BagButton />
                 </footer>
               </Product>
             </Link>

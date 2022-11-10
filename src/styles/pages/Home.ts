@@ -66,16 +66,3 @@ export const ProductDescription = styled('div', {
       color: '$green300'
     },
 });
-
-export const BagButton = styled('button', {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-
-  height: 56,
-  width: 56,
-  backgroundColor: '$green500',
-  borderRadius: 6,
-  border: 'none',
-  cursor: 'pointer'
-});
