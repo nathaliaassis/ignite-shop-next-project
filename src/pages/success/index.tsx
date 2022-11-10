@@ -4,19 +4,23 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import Stripe from "stripe";
-import { ImageContainer, SuccessContainer } from "styles/pages/success";
+import {
+  ImageContainer,
+  ImagesBox,
+  SuccessContainer,
+} from "styles/pages/success";
 
 interface SuccessPageProps {
   customer: {
     name: string;
   };
-  product: {
+  products: {
     name: string;
     imageUrl: string;
-  };
+  }[];
 }
 
-export default function Success({ customer, product }: SuccessPageProps) {
+export default function Success({ customer, products }: SuccessPageProps) {
   return (
     <>
       <Head>
@@ -26,18 +30,23 @@ export default function Success({ customer, product }: SuccessPageProps) {
         <meta name="robots" content="noindex" />
       </Head>
       <SuccessContainer>
-        <h1>Compra efetuada!</h1>
-        <ImageContainer>
-          <Image
-            src={product.imageUrl}
-            alt={`${product.name} photo`}
-            width={150}
-            height={150}
-          />
-        </ImageContainer>
+        <ImagesBox>
+          {products.map((product) => (
+            <ImageContainer>
+              <Image
+                src={product.imageUrl}
+                alt={`${product.name} photo`}
+                width={140}
+                height={140}
+              />
+            </ImageContainer>
+          ))}
+        </ImagesBox>
+        <h2>Compra efetuada!</h2>
         <p>
-          Uhuul <strong>{customer.name}</strong>, sua{" "}
-          <strong>{product.name}</strong> já está a caminho da sua casa.
+          Uhuul <strong>{customer.name}</strong>, sua compra de{" "}
+          {products.length} {products.length === 1 ? "camiseta" : "camisetas"}{" "}
+          já está a caminho da sua casa.
         </p>
 
         <Link href="/">Voltar ao catálogo</Link>
@@ -63,18 +72,23 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const session = await stripe.checkout.sessions.retrieve(sessionId, {
     expand: ["line_items", "line_items.data.price.product"],
   });
+  const productsList = session.line_items?.data.map((item) => {
+    return item.price?.product as Stripe.Product;
+  });
 
-  const product = session.line_items?.data[0].price?.product as Stripe.Product;
+  const products = productsList?.map((product) => {
+    return {
+      name: product.name,
+      imageUrl: product.images[0],
+    };
+  });
 
   return {
     props: {
       customer: {
         name: session.customer_details?.name,
       },
-      product: {
-        name: product.name,
-        imageUrl: product.images[0],
-      },
+      products,
     },
   };
 };

@@ -14,9 +14,39 @@ import {
 
 import closeIcon from "assets/close.svg";
 import { useBag } from "hooks/BagContext";
+import { useState } from "react";
+import axios from "axios";
 
 export default function Bag() {
   const { isOpened, closeBag, items, removeItemFromBag, total } = useBag();
+  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
+    useState(false);
+
+  async function handleFinishButton() {
+    try {
+      setIsCreatingCheckoutSession(true);
+
+      const products = items.map((item) => {
+        return {
+          price: item.defaultPriceId,
+          quantity: 1,
+        };
+      });
+
+      const response = await axios.post("/api/checkout", {
+        products,
+      });
+
+      const { checkoutUrl } = response.data;
+
+      items.map((item) => removeItemFromBag(item.id));
+      window.location.href = checkoutUrl; // rota externa
+    } catch (error) {
+      setIsCreatingCheckoutSession(false);
+      // Conectar com uma ferramenta de observabilidade (DataDog, Sentry)
+      alert("Falha ao redirecionar ao checkout.");
+    }
+  }
 
   return (
     <Container isOpened={isOpened}>
@@ -66,7 +96,10 @@ export default function Bag() {
           <strong>Valor total</strong>
           <strong>{total}</strong>
         </Total>
-        <BuyButton disabled={!items?.length} onClick={() => {}}>
+        <BuyButton
+          disabled={!items?.length || isCreatingCheckoutSession}
+          onClick={handleFinishButton}
+        >
           Finalizar Compra
         </BuyButton>
       </div>

@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import AppProvider from "hooks";
 import Bag from "components/bag";
 import BagButton from "components/bagButton";
@@ -12,16 +13,20 @@ import logoImg from "assets/logo.svg";
 globalStyles();
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  const showBagButton = router.pathname !== "/success";
+
   return (
     <AppProvider>
       <Container>
         <Bag />
-        <Header>
+        <Header showBagButton={showBagButton}>
           <Link href="/">
             <Image src={logoImg} alt="shop logo" />
           </Link>
-
-          <BagButton color="gray" showQuantity />
+          {showBagButton && (
+            <BagButton color="gray" showQuantity openBagFunction />
+          )}
         </Header>
         <Component {...pageProps} />
       </Container>

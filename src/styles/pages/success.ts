@@ -8,7 +8,7 @@ export const SuccessContainer = styled('main', {
   margin: '0 auto',
   height: 656,
 
-  h1: {
+  h2: {
     fontSize: '$2xl',
     color: '$gray100',
   },
@@ -36,21 +36,31 @@ export const SuccessContainer = styled('main', {
   }
 });
 
+export const ImagesBox = styled('div', { 
+  display: 'flex',
+  justifyContent: 'center',
+  marginBottom: '2rem',
+  width: 480,
+});
+
 export const ImageContainer = styled('div', {
   width: '100%',
-  maxWidth: 130,
-  height: 145,
+  maxWidth: 140,
+  height: 140,
   background: 'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
-  borderRadius: 8,
+  borderRadius: 70,
   padding: '0.25rem',
-  marginTop: '4rem',
+  boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
 
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
 
-
   img: {
     objectFit: 'cover',
+  },
+
+  '& + div': {
+    marginLeft: '-10%'
   }
 });

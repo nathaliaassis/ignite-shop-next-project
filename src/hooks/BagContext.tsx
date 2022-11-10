@@ -38,7 +38,9 @@ export const BagProvider: React.FC<BagProviderProps> = ({ children }) => {
     let storageItems;
     storageItems = localStorage.getItem("@IgniteShop") as string;
 
-    setItems(JSON.parse(storageItems).items);
+    if (storageItems) {
+      setItems(JSON.parse(storageItems).items);
+    }
   }, []);
 
   useEffect(() => {

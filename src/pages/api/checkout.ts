@@ -1,15 +1,20 @@
 import { stripe } from "lib/stripe";
 import { NextApiRequest, NextApiResponse } from "next";
 
+interface ProductProps {
+  priceId: string;
+  quantity: number;
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse ) {
-  const { priceId } = req.body;
+  const { products } = req.body;
 
   if(req.method !== "POST") {
     return res.status(405).json({ error: "Invalid request method." });
   }
 
-  if(!priceId) {
-    return res.status(400).json({ error: "Missing priceId" });
+  if(!products) {
+    return res.status(400).json({ error: "Missing products" });
   }
 
   const successUrl = `${process.env.NEXT_URL}/success?session_id={CHECKOUT_SESSION_ID}`;
@@ -19,12 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse 
     mode: 'payment',
     success_url: successUrl,
     cancel_url: cancelUrl,
-    line_items: [
-      { 
-        price: priceId,
-        quantity: 1,
-      },
-    ],
+    line_items: products,
   });
 
   return res.status(201).json({
