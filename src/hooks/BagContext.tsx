@@ -85,8 +85,11 @@ export const BagProvider: React.FC<BagProviderProps> = ({ children }) => {
     }
   };
 
-  const removeItemFromBag = (productId: string) => {
-    const newListWithoutItem = items.filter((item) => item.id !== productId);
+  const removeItemFromBag = (productsIds: Array<string>) => {
+    console.log("item to be removed ", productsIds);
+    const newListWithoutItem = items.filter(
+      (item) => !productsIds.includes(item.id)
+    );
 
     setItems(newListWithoutItem);
 

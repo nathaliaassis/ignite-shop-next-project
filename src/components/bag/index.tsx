@@ -38,8 +38,9 @@ export default function Bag() {
       });
 
       const { checkoutUrl } = response.data;
+      const itemsToBeRemoved = items.map((item) => item.id);
 
-      items.map((item) => removeItemFromBag(item.id));
+      removeItemFromBag(itemsToBeRemoved as unknown as string);
       window.location.href = checkoutUrl; // rota externa
     } catch (error) {
       setIsCreatingCheckoutSession(false);

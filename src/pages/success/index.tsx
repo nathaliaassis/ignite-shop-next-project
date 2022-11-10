@@ -32,7 +32,7 @@ export default function Success({ customer, products }: SuccessPageProps) {
       <SuccessContainer>
         <ImagesBox>
           {products.map((product) => (
-            <ImageContainer>
+            <ImageContainer key={product.name}>
               <Image
                 src={product.imageUrl}
                 alt={`${product.name} photo`}
