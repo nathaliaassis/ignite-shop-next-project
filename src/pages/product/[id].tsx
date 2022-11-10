@@ -11,6 +11,7 @@ import {
   ProductDetails,
 } from "styles/pages/product";
 import Head from "next/head";
+import { useBag } from "hooks/BagContext";
 
 interface ProductProps {
   product: {
@@ -24,6 +25,7 @@ interface ProductProps {
 }
 
 export default function Product({ product }: ProductProps) {
+  const { addNewItemToBag } = useBag();
   const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
     useState(false);
 
@@ -31,6 +33,10 @@ export default function Product({ product }: ProductProps) {
 
   if (isFallback) {
     return <span>Loading...</span>;
+  }
+
+  async function addProduct() {
+    addNewItemToBag(product);
   }
 
   async function handleBuyButton() {
@@ -68,11 +74,8 @@ export default function Product({ product }: ProductProps) {
           <h1>{product.name}</h1>
           <span>{product.price}</span>
           <p>{product.description}</p>
-          <button
-            disabled={isCreatingCheckoutSession}
-            onClick={handleBuyButton}
-          >
-            Comprar agora
+          <button disabled={isCreatingCheckoutSession} onClick={addProduct}>
+            Colocar na sacola
           </button>
         </ProductDetails>
       </ProductContainer>

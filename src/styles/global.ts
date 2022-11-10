@@ -4,9 +4,12 @@ export const globalStyles = globalCss({
   '*': {
     margin: 0,
     padding: 0,
+    boxSizing: 'border-box',
   },
 
   body: {
+    margin: 0,
+    padding: 0,
     '-webkit-font-smoothing': 'antialised',
     backgroundColor: '$gray900',
     color: '$gray100'
